@@ -1,0 +1,19 @@
+{
+    "name": "zexa/interview-task",
+    "authors": [
+        {
+            "name": "zexa",
+            "email": "zexa@cock.li"
+        }
+    ],
+    "autoload": {
+      "psr-4": {
+        "": "src/",
+        "Parsers\\": "src/Parsers/",
+        "ComissionsApp\\": "src/ComissionsApp/",
+        "CLI\\": "src/CLI/"
+      },
+      "files": ["src/CLI/_echo.php"]
+    },
+    "require": {}
+}

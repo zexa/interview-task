@@ -1,0 +1,28 @@
+{
+  "comissions": {
+    "natural": {
+      "cash_in": {
+        "multiplier": 0.0003,
+        "max": 5.00
+      },
+      "cash_out": {
+        "multiplier": 0.003,
+        "discountOperationsLimit": 3,
+        "discountLimit": 1000
+      }
+    },
+    "legal": {
+      "cash_in": {
+        "multiplier": 0.0003,
+        "max": 5.00
+      },
+      "cash_out": {
+        "multiplier": 0.003,
+        "min": 0.50
+      }
+    }
+  },
+  "rates": {
+    "file": "rates.json"
+  }
+}
