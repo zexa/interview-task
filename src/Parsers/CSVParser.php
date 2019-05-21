@@ -11,13 +11,14 @@ class CSVParser extends Template {
 			while (($data = fgetcsv($handle, 1000, ",")) !== false) {
 				$num = count($data);
 				$parsedLine = array();
-				for ($c=0; $c < $num; $c++) {
-					// gives array key name as per format if format is set.
+				$c = 0;
+				foreach($data as $key) {
 					if (isset($this->format) && (array_key_exists($c, $this->format))) {
-						$parsedLine[$this->format[$c]] = $data[$c];
+						$parsedLine[$this->format[$c]] = $key;
 					} else {
-						$parsedLine[] = $data[$c];
+						$parsedLine[] = $key;
 					}
+					$c++;
 				}
 				call_user_func($callback, $parsedLine);
 			}
