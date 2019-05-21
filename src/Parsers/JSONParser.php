@@ -2,8 +2,6 @@
 
 namespace Parsers;
 
-require_once('src/Parsers/Template.php');
-
 class JSONParser extends Template {
 
   public function parse() {
