@@ -4,25 +4,23 @@ namespace ComissionsApp;
 
 class CurrencyConverter
 {
+    private $rates;
 
-  private $rates;
-
-  public function __construct($rates)
-  {
-    $this->rates = $rates;
-  }
-
-  public function convert(float $value, $currencyFrom, $currencyTo)
-  {
-    if ($currencyFrom === $currencyTo) {
-      return $value;
+    public function __construct($rates)
+    {
+        $this->rates = $rates;
     }
 
-    $multiplier = $this->rates[$currencyFrom][$currencyTo];
-    $converted = $value * $multiplier;
-    return $converted;
-  }
+    public function convert(float $value, $currencyFrom, $currencyTo)
+    {
+        if ($currencyFrom === $currencyTo) {
+            return $value;
+        }
 
+        $multiplier = $this->rates[$currencyFrom][$currencyTo];
+        $converted = $value * $multiplier;
+        return $converted;
+    }
 }
 
 ?>
