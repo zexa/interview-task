@@ -5,7 +5,7 @@ Commission payment calculator.
 ```bash
 git clone repo
 cd repo
-composer install
+composer install --dev
 php index.php input.csv
 ```
 
