@@ -15,5 +15,8 @@
       },
       "files": ["src/CLI/_echo.php"]
     },
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
+    }
 }

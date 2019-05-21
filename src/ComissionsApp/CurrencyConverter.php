@@ -2,15 +2,18 @@
 
 namespace ComissionsApp;
 
-class CurrencyConverter {
+class CurrencyConverter
+{
 
   private $rates;
 
-  public function __construct($rates) {
+  public function __construct($rates)
+  {
     $this->rates = $rates;
   }
 
-  public function convert(float $value, $currencyFrom, $currencyTo) {
+  public function convert(float $value, $currencyFrom, $currencyTo)
+  {
     if ($currencyFrom === $currencyTo) {
       return $value;
     }

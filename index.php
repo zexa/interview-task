@@ -7,8 +7,8 @@ use ComissionsApp\ComissionCalculator;
 use Parsers\JSONParser;
 use Parsers\CSVParser;
 
-$jsonParser = new Parsers\JSONParser();
-$csvParser = new Parsers\CSVParser();
+$jsonParser = new JSONParser();
+$csvParser = new CSVParser();
 
 // Config
 $configFilePath = __DIR__ . '/config.json';
@@ -46,7 +46,8 @@ $csvParser->format = array(
 	"value",
 	"currency"
 );
-$csvParser->parseByLine(function($arr) use (&$comissionsCalculator) {
+$csvParser->parseByLine(function($arr) use (&$comissionsCalculator)
+{
 	$comissionsCalculator->inputEntry($arr);
 	$comission = $comissionsCalculator->calculateComission();
 	_echo($comission);

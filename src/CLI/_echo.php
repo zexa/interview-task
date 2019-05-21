@@ -2,7 +2,8 @@
 
 namespace CLI;
 
-function _echo($str) {
+function _echo($str)
+{
   fputs(STDOUT, $str . "\n");
 }
 
