@@ -1,8 +1,12 @@
 <?php
 
+if ($argc < 2) {
+  echo("Missing required argument." . PHP_EOL);
+  exit;
+}
+
 require __DIR__ . '/vendor/autoload.php';
 
-use function CLI\_echo;
 use ComissionsApp\ComissionCalculator;
 use Parsers\JSONParser;
 use Parsers\CSVParser;
@@ -13,7 +17,7 @@ $csvParser = new CSVParser();
 // Config
 $configFilePath = __DIR__ . '/config.json';
 if (!$jsonParser->setFile($configFilePath)) {
-  _echo("Configuration file '" . $configFilePath . "' does not exist.");
+  echo("Configuration file '" . $configFilePath . "' does not exist." . PHP_EOL);
   exit;
 }
 $config = $jsonParser->parse();
@@ -21,19 +25,14 @@ $config = $jsonParser->parse();
 // Rates
 $ratesFilePath = __DIR__ . '/' . $config["rates"]["file"];
 if (!$jsonParser->setFile($ratesFilePath)) {
-  _echo("Rates file '" . $ratesFilePath . "' does not exist.");
+  echo("Rates file '" . $ratesFilePath . "' does not exist." . PHP_EOL);
   exit;
 }
 $rates = $jsonParser->parse();
 
-// Input
-if (!array_key_exists(1, $argv)) {
-  _echo("Missing required argument.");
-  exit;
-}
 $inputFilePath = $argv[1];
 if (!$csvParser->setFile($inputFilePath)) {
-  _echo("Input file '" . $inputFilePath . "' does not exist.");
+  echo("Input file '" . $inputFilePath . "' does not exist." . PHP_EOL);
   exit;
 }
 
@@ -50,7 +49,7 @@ $csvParser->parseByLine(function($arr) use (&$comissionsCalculator)
 {
 	$comissionsCalculator->inputEntry($arr);
 	$comission = $comissionsCalculator->calculateComission();
-	_echo($comission);
+	echo($comission . PHP_EOL);
 });
 
 ?>
