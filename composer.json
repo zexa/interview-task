@@ -10,8 +10,7 @@
       "psr-4": {
         "": "src/",
         "Parsers\\": "src/Parsers/",
-        "ComissionsApp\\": "src/ComissionsApp/",
-        "CLI\\": "src/CLI/"
+        "ComissionsApp\\": "src/ComissionsApp/"
       },
       "files": ["src/CLI/_echo.php"]
     },
