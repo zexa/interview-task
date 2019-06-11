@@ -113,4 +113,40 @@ final class DataInputterTest extends TestCase
         $this->expectException(\Exception::class);
         $dataInputter->getResults($realfp);
     }
+
+    public function testUnknownOperationsThrowException()
+    {
+        $dataInputter = new DataInputter();
+
+        $filename = 'input-unknown-operation.csv';
+        $realfp = __DIR__ . '/inputs/' . $filename;
+        $this->assertFileExists($realfp);
+
+        $this->expectException(\Exception::class);
+        $dataInputter->getResults($realfp);
+    }
+
+    public function testUnknownClientTypesThrowException()
+    {
+        $dataInputter = new DataInputter();
+
+        $filename = 'input-unknown-client-type.csv';
+        $realfp = __DIR__ . '/inputs/' . $filename;
+        $this->assertFileExists($realfp);
+
+        $this->expectException(\Exception::class);
+        $dataInputter->getResults($realfp);
+    }
+
+    public function testInvalidDateFormatThrowException()
+    {
+        $dataInputter = new DataInputter();
+
+        $filename = 'input-invalid-date-format.csv';
+        $realfp = __DIR__ . '/inputs/' . $filename;
+        $this->assertFileExists($realfp);
+
+        $this->expectException(\Exception::class);
+        $dataInputter->getResults($realfp);
+    }
 }

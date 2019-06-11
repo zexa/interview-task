@@ -23,11 +23,28 @@ class ComissionCalculator
         $this->currencyConverter = new CurrencyConverter($rates);
     }
 
-    public function inputEntry($arrEntry): void
+    public function inputEntry(array $arrEntry): void
     {
         $this->entryStack[] = $arrEntry;
+		$this->validateEntry($arrEntry);
         $this->lastEntry = $arrEntry;
-    }
+	}
+
+	private function validateEntry(array $entry) {
+		$this->validateDate($entry["date"]);
+	}
+
+	private function validateDate(string $dateInput) {
+		$date = \DateTime::createFromFormat('Y-m-d', $dateInput);
+		$date_errors = \DateTime::getLastErrors();
+		if ($date_errors['warning_count'] + $date_errors['error_count'] > 0) {
+			throw new \Exception(
+				var_export($dateInput, true) .
+				PHP_EOL . 
+				" is in an invalid date format."
+			);
+		}
+	}
 
     public function calculateComission()
     {
@@ -39,6 +56,8 @@ class ComissionCalculator
             case "legal":
                 $comission = $this->legal();
                 break;
+            default:
+                throw new \Exception(var_export($this->lastEntry, true) . PHP_EOL . "Unknown client type");
         }
         $comission = $this->ceiling($comission);
         
@@ -58,6 +77,15 @@ class ComissionCalculator
                 return $this->naturalCashOut();
             case "cash_in":
                 return $this->naturalCashIn();
+            default:
+                throw new \Exception(
+                    var_export($this->lastEntry, true) .
+                    PHP_EOL .
+                    "Operation '" .
+                    $this->lastEntry["operation"] .
+                    "' does not exist for client type '" .
+                    $this->lastEntry["userType"] . "'."
+                );
         }
         return 0;
     }
@@ -235,6 +263,15 @@ class ComissionCalculator
             case "cash_in":
                 $comission = $this->legalCashIn();
                 break;
+            default:
+				throw new \Exception(
+					var_export($this->lastEntry, true) . 
+					PHP_EOL . 
+					"Operation '" . 
+					$this->lastEntry["operation"] . 
+					"' does not exist for client type '" . 
+					$this->lastEntry["userType"] . "'."
+				);
         }
         return $comission;
     }
