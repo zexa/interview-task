@@ -2,19 +2,29 @@
 
 namespace ComissionsApp;
 
+use ComissionsApp\ConfigProvider;
+
 class CurrencyConverter
 {
     private $rates;
 
-    public function __construct($rates)
+    public function __construct($rates=null)
     {
-        $this->rates = $rates;
+        if ($rates != null) {
+            $this->rates = $rates;
+            return;
+        }
+        $ConfigProvider = new ConfigProvider();
+        $this->rates = $ConfigProvider->getRates();
     }
 
-    public function convert(float $value, $currencyFrom, $currencyTo)
+    public function convert(float $value, string $currencyFrom, string $currencyTo): float
     {
-        if ($currencyFrom === $currencyTo) {
-            return $value;
+        if (!array_key_exists($currencyFrom, $this->rates)) {
+            throw new \Exception($currencyFrom . ' does not exist in rates file');
+        }
+        if (!array_key_exists($currencyTo, $this->rates[$currencyFrom])) {
+            throw new \Exception($currencyTo . ' does not exist in ' . $currencyFrom . ' rates file');
         }
 
         $multiplier = $this->rates[$currencyFrom][$currencyTo];
@@ -22,5 +32,3 @@ class CurrencyConverter
         return $converted;
     }
 }
-
-?>

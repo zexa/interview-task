@@ -2,6 +2,8 @@
 
 namespace ComissionsApp;
 
+use ComissionsApp\ConfigProvider;
+
 class ComissionCalculator
 {
     private $entryStack;
@@ -9,14 +11,19 @@ class ComissionCalculator
     private $currencyConverter;
     private $config;
 
-    public function __construct($config, $rates)
+    public function __construct($config=null, $rates=null)
     {
         $this->entryStack = array();
+
+        $ConfigProvider = new ConfigProvider();
+        if ($config == null) {
+            $config = $ConfigProvider->getConfig();
+        }
         $this->config = $config;
         $this->currencyConverter = new CurrencyConverter($rates);
     }
 
-    public function inputEntry($arrEntry)
+    public function inputEntry($arrEntry): void
     {
         $this->entryStack[] = $arrEntry;
         $this->lastEntry = $arrEntry;
@@ -34,6 +41,13 @@ class ComissionCalculator
                 break;
         }
         $comission = $this->ceiling($comission);
+        
+        // JPY MUST NOT have decimal places
+        // in the case that it does, we round the value up
+        if ($this->lastEntry["currency"] === "JPY") {
+            return $this->removeDecimals($comission);
+        }
+        
         return $comission;
     }
 
@@ -269,21 +283,19 @@ class ComissionCalculator
     private function ceiling(string $fl)
     {
         // Checks for the ammount of numbers in decimal places
-        // if numbers > 2, +0.01.
-        if (strlen(substr(strrchr($fl, '.'), 1)) > 2) {
+        // if numbers after comma > 2, +0.01.
+        if (strlen(substr(strval(strrchr($fl, '.')), 1)) > 2) {
             $fl = (float) $fl + 0.01;
         } else {
             $fl = (float) $fl;
         }
-        // JPY MUST NOT have decimal places
-        // in the case that it does, we round the value up
-        if ($this->lastEntry["currency"] === "JPY") {
-            if (strpos((string) $fl, '.') !== false) {
-                return ceil($fl);
-            }
-        }
         return number_format($fl, 2);
     }
-}
 
-?>
+    private function removeDecimals($fl)
+    {
+        if (strpos((string) $fl, '.')) {
+            return intval(ceil($fl));
+        }
+    }
+}

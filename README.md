@@ -1,7 +1,9 @@
 # Interview task
+
 Commission payment calculator.
 
 ## Usage
+
 ```bash
 git clone repo
 cd repo
@@ -10,8 +12,9 @@ php index.php input.csv
 ```
 
 ## Testing
+
 ```bash
-./vendor/bin/phpunit --bootstrap vendor/autoload.php --testdox tests/default
+vendor/bin/phpunit --testdox tests
 ```
 
 # Reikalavimai
@@ -31,3 +34,8 @@ php index.php input.csv
   - [x] kaip paleisti sistemos testus (kokią komandą vykdyti)
   - [x] funkcionalumo trumpas aprašymas mažiau aiškiose vietose gali būti pačiame kode
 
+## Response
+
+1. [x] Ištaisyti output rezultatą, kad apvalintų visas valiutas teisingai.
+2. [x] Patvarkyti, kad padavus nevalidžius (nepalaikomus) duomenis į input failą, būtų grąžinama klaida, o ne tiesiog komisinis = 0. Klaidų apdorojimui rekomenduojama naudoti Exceptions.
+3. [x] Parašyti Unit testus.

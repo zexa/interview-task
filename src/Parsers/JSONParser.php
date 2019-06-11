@@ -4,7 +4,7 @@ namespace Parsers;
 
 class JSONParser extends Template
 {
-    public function parse()
+    public function parse(): array
     {
         if (!isset($this->filePath)) {
             return null;
@@ -12,5 +12,3 @@ class JSONParser extends Template
         return json_decode(file_get_contents($this->filePath), true);
     }
 }
-
-?>

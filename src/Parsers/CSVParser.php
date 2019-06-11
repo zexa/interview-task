@@ -10,6 +10,9 @@ class CSVParser extends Template
     {
         if (($handle = fopen($this->filePath, "r")) !== false) {
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                if ($data === null) {
+                    throw new \Exception("CSVParser parsebyLine returns null.");
+                }
                 $num = count($data);
                 $parsedLine = array();
                 $c = 0;
@@ -29,11 +32,4 @@ class CSVParser extends Template
             fclose($handle);
         }
     }
-
-    public function parse()
-    {
-        return array_map('str_getcsv', file($this->filePath));
-    }
 }
-
-?>
