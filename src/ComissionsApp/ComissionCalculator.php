@@ -26,25 +26,27 @@ class ComissionCalculator
     public function inputEntry(array $arrEntry): void
     {
         $this->entryStack[] = $arrEntry;
-		$this->validateEntry($arrEntry);
+        $this->validateEntry($arrEntry);
         $this->lastEntry = $arrEntry;
-	}
+    }
 
-	private function validateEntry(array $entry) {
-		$this->validateDate($entry["date"]);
-	}
+    private function validateEntry(array $entry)
+    {
+        $this->validateDate($entry["date"]);
+    }
 
-	private function validateDate(string $dateInput) {
-		$date = \DateTime::createFromFormat('Y-m-d', $dateInput);
-		$date_errors = \DateTime::getLastErrors();
-		if ($date_errors['warning_count'] + $date_errors['error_count'] > 0) {
-			throw new \Exception(
-				var_export($dateInput, true) .
-				PHP_EOL . 
-				" is in an invalid date format."
-			);
-		}
-	}
+    private function validateDate(string $dateInput)
+    {
+        $date = \DateTime::createFromFormat('Y-m-d', $dateInput);
+        $date_errors = \DateTime::getLastErrors();
+        if ($date_errors['warning_count'] + $date_errors['error_count'] > 0) {
+            throw new \Exception(
+                var_export($dateInput, true) .
+                PHP_EOL .
+                " is in an invalid date format."
+            );
+        }
+    }
 
     public function calculateComission()
     {
@@ -264,14 +266,14 @@ class ComissionCalculator
                 $comission = $this->legalCashIn();
                 break;
             default:
-				throw new \Exception(
-					var_export($this->lastEntry, true) . 
-					PHP_EOL . 
-					"Operation '" . 
-					$this->lastEntry["operation"] . 
-					"' does not exist for client type '" . 
-					$this->lastEntry["userType"] . "'."
-				);
+                throw new \Exception(
+                    var_export($this->lastEntry, true) .
+                    PHP_EOL .
+                    "Operation '" .
+                    $this->lastEntry["operation"] .
+                    "' does not exist for client type '" .
+                    $this->lastEntry["userType"] . "'."
+                );
         }
         return $comission;
     }
