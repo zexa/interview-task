@@ -11,7 +11,7 @@ class ComissionCalculator
     private $currencyConverter;
     private $config;
 
-    public function __construct($config=null, $rates=null)
+    public function __construct($config = null, $rates = null)
     {
         $this->entryStack = array();
 
@@ -42,8 +42,8 @@ class ComissionCalculator
         if ($date_errors['warning_count'] + $date_errors['error_count'] > 0) {
             throw new \Exception(
                 var_export($dateInput, true) .
-                PHP_EOL .
-                " is in an invalid date format."
+                    PHP_EOL .
+                    " is in an invalid date format."
             );
         }
     }
@@ -59,16 +59,20 @@ class ComissionCalculator
                 $comission = $this->legal();
                 break;
             default:
-                throw new \Exception(var_export($this->lastEntry, true) . PHP_EOL . "Unknown client type");
+                throw new \Exception(
+                    var_export($this->lastEntry, true) .
+                        PHP_EOL .
+                        "Unknown client type"
+                );
         }
         $comission = $this->ceiling($comission);
-        
+
         // JPY MUST NOT have decimal places
         // in the case that it does, we round the value up
         if ($this->lastEntry["currency"] === "JPY") {
             return $this->removeDecimals($comission);
         }
-        
+
         return $comission;
     }
 
@@ -82,11 +86,12 @@ class ComissionCalculator
             default:
                 throw new \Exception(
                     var_export($this->lastEntry, true) .
-                    PHP_EOL .
-                    "Operation '" .
-                    $this->lastEntry["operation"] .
-                    "' does not exist for client type '" .
-                    $this->lastEntry["userType"] . "'."
+                        PHP_EOL .
+                        "Operation '" .
+                        $this->lastEntry["operation"] .
+                        "' does not exist for client type '" .
+                        $this->lastEntry["userType"] .
+                        "'."
                 );
         }
         return 0;
@@ -116,7 +121,7 @@ class ComissionCalculator
                 continue;
             }
             // Stops iterations if we have went out of our time bounds
-            if (!$this->sameWeek($i)) {
+            if (!$this->sameWeekWrapper($i)) {
                 break;
             }
             // Converts the entry because all operations are done with euros
@@ -181,41 +186,45 @@ class ComissionCalculator
 
     // Creates array of lastEntry's week dates
     // Checks if current entry in stack is within that array.
-    private function sameWeek(int $entryInStack): bool
+    private function sameWeekWrapper(int $entryInStack): bool
     {
-        $lastEntryDate = $this->lastEntry["date"];
-        $sameWeekDates[] = date(
-            "Y-m-d",
-            strtotime('monday this week', strtotime($lastEntryDate))
+        return $this->sameWeek(
+            $this->lastEntry["date"],
+            $this->entryStack[$entryInStack]["date"]
         );
+    }
+
+    public function sameWeek(string $date1, string $date2): bool
+    {
         $sameWeekDates[] = date(
             "Y-m-d",
-            strtotime('tuesday this week', strtotime($lastEntryDate))
-        );
-        $sameWeekDates[] = date(
-            "Y-m-d",
-            strtotime('wednesday this week', strtotime($lastEntryDate))
-        );
-        $sameWeekDates[] = date(
-            "Y-m-d",
-            strtotime('thursday this week', strtotime($lastEntryDate))
+            strtotime('monday this week', strtotime($date1))
         );
         $sameWeekDates[] = date(
             "Y-m-d",
-            strtotime('friday this week', strtotime($lastEntryDate))
+            strtotime('tuesday this week', strtotime($date1))
         );
         $sameWeekDates[] = date(
             "Y-m-d",
-            strtotime('saturday this week', strtotime($lastEntryDate))
+            strtotime('wednesday this week', strtotime($date1))
         );
         $sameWeekDates[] = date(
             "Y-m-d",
-            strtotime('sunday this week', strtotime($lastEntryDate))
+            strtotime('thursday this week', strtotime($date1))
         );
-        $sw = in_array(
-            $this->entryStack[$entryInStack]["date"],
-            $sameWeekDates
+        $sameWeekDates[] = date(
+            "Y-m-d",
+            strtotime('friday this week', strtotime($date1))
         );
+        $sameWeekDates[] = date(
+            "Y-m-d",
+            strtotime('saturday this week', strtotime($date1))
+        );
+        $sameWeekDates[] = date(
+            "Y-m-d",
+            strtotime('sunday this week', strtotime($date1))
+        );
+        $sw = in_array($date2, $sameWeekDates);
         return $sw;
     }
 
@@ -268,11 +277,12 @@ class ComissionCalculator
             default:
                 throw new \Exception(
                     var_export($this->lastEntry, true) .
-                    PHP_EOL .
-                    "Operation '" .
-                    $this->lastEntry["operation"] .
-                    "' does not exist for client type '" .
-                    $this->lastEntry["userType"] . "'."
+                        PHP_EOL .
+                        "Operation '" .
+                        $this->lastEntry["operation"] .
+                        "' does not exist for client type '" .
+                        $this->lastEntry["userType"] .
+                        "'."
                 );
         }
         return $comission;
