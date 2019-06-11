@@ -1,0 +1,3 @@
+parameters:
+        autoload_files:
+                - vendor/bin/.phpunit/phpunit-5.7/vendor/autoload.php
