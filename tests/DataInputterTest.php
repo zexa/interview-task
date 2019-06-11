@@ -64,8 +64,6 @@ final class DataInputterTest extends TestCase
         $dataInputterTestHelper = new DataInputterTestHelper();
         $dataInputter = new DataInputter();
 
-        //$filename = 'input-jpy-0-no-decimal.csv';
-
         $realfp = __DIR__ . '/inputs/' . $filename;
         $this->assertFileExists($realfp);
 
@@ -147,6 +145,18 @@ final class DataInputterTest extends TestCase
         $this->assertFileExists($realfp);
 
         $this->expectException(\Exception::class);
+        $dataInputter->getResults($realfp);
+    }
+
+    public function testInvalidNonNumberValueThrowsTypeError()
+    {
+        $dataInputter = new DataInputter();
+
+        $filename = 'input-invalid-number-value.csv';
+        $realfp = __DIR__ . '/inputs/' . $filename;
+        $this->assertFileExists($realfp);
+        
+        $this->expectException(\TypeError::class);
         $dataInputter->getResults($realfp);
     }
 }

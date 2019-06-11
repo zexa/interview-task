@@ -33,9 +33,10 @@ class ComissionCalculator
     private function validateEntry(array $entry)
     {
         $this->validateDate($entry["date"]);
+        $this->validateValue($entry["value"], $entry["currency"]);
     }
 
-    private function validateDate(string $dateInput)
+    private function validateDate(string $dateInput): void
     {
         $date = \DateTime::createFromFormat('Y-m-d', $dateInput);
         $date_errors = \DateTime::getLastErrors();
@@ -46,6 +47,11 @@ class ComissionCalculator
                     " is in an invalid date format."
             );
         }
+    }
+
+    private function validateValue(string $value, string $currency): void
+    {
+        $this->currencyConverter->convert($value, $currency, $currency);
     }
 
     public function calculateComission()
