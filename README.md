@@ -8,7 +8,7 @@ Commission payment calculator.
 git clone repo
 cd repo
 composer install --dev
-php index.php input.csv
+php index.php tests/inputs/input.csv # test input
 ```
 
 ## Testing
